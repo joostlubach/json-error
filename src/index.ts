@@ -45,7 +45,7 @@ interface JSONError extends Error {
   toJSON(verbose?: boolean): Record<string, any>
 }
 
-function isJSONError(error: Error): error is JSONError {
+export function isJSONError(error: Error): error is JSONError {
   if (!isFunction((error as any).toJSON)) { return false }
 
   return true
