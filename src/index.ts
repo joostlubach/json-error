@@ -5,7 +5,7 @@ import { isFunction } from 'lodash'
 
 const DEV = process.env.NODE_ENV !== 'production'
 
-export default function jsonError() {
+export default function jsonError(options: JSONErrorOptions = {}) {
   return (error: Error, _: Request, response: Response, next: NextFunction) => {
     let status: number = (error as any).status
     if (status === undefined) { status = 500 }
@@ -30,15 +30,22 @@ export default function jsonError() {
 
     // Log the original error in any case, as details will be lost.
     if (response.statusCode >= 500) {
-      console.error(`An error occurred: ${error.stack}`)
-      if (isJSONError(error)) {
-        console.error(error.toJSON(true))
+      const logged = options.logInternal?.(error) ?? false
+      if (!logged) {
+        console.error(`An error occurred: ${error.stack}`)
+        if (isJSONError(error)) {
+          console.error(error.toJSON(true))
+        }
       }
     }
 
     response.json(json)
     next()
   }
+}
+
+export interface JSONErrorOptions {
+  logInternal?: (error: Error) => boolean
 }
 
 interface JSONError extends Error {
