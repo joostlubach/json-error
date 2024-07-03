@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 
 import { NextFunction, Request, Response } from 'express'
-import { isFunction } from 'lodash'
+import { isFunction } from 'ytil'
 
 export default function jsonError(options: JSONErrorOptions = {}) {
   return (error: Error, _: Request, response: Response, next: NextFunction) => {
