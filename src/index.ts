@@ -19,10 +19,7 @@ export default function jsonError(options: JSONErrorOptions = {}) {
     let json
     if (isJSONError(error)) {
       // Let the error serialize itself. Pass a flag to determine if internal details should be included.
-      json = {
-        status,
-        error: error.toJSON({mask: mask ? 'always' : 'auto'}),
-      }
+      json = error.toJSON({mask: mask ? 'always' : 'auto'})
     } else if (status < 500) {
       // Provide an error message.
       json = {status, error: {message: error.message}}
